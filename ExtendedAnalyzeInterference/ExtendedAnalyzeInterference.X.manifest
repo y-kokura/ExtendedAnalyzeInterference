@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+  <assemblyIdentity name="ExtendedAnalyzeInterference" version="1.0.0.0"></assemblyIdentity>
+
+  <clrClass clsid="{4571000a-b104-4c29-9f85-04d03e740459}" progid="ExtendedAnalyzeInterference.StandardAddInServer" threadingModel="Both" name="ExtendedAnalyzeInterference.StandardAddInServer" runtimeVersion=""></clrClass>
+
+  <file name="ExtendedAnalyzeInterference.dll" hashalg="SHA1"></file>
+
+</assembly>
