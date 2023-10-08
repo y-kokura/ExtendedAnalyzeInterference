@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using AnalyzeInterference;
 using AnalyzeInterference.Views;
 
 namespace ExtendedAnalyzeInterference
@@ -18,6 +19,7 @@ namespace ExtendedAnalyzeInterference
         // クラスレベルでの変数宣言
         private ButtonDefinition createdAddInButton;
         private UserInterfaceEvents uiEvents;
+        private static Inventor.Application InvApp;
 
         public StandardAddInServer()
         {
@@ -39,15 +41,15 @@ namespace ExtendedAnalyzeInterference
 
             try
             {
-                Globals.InvApp = addInSiteObject.Application;
+                InvApp = addInSiteObject.Application;
 
-                uiEvents = Globals.InvApp.UserInterfaceManager.UserInterfaceEvents;
+                uiEvents = InvApp.UserInterfaceManager.UserInterfaceEvents;
 
                 // イベントハンドラの設定
                 uiEvents.OnResetRibbonInterface += new UserInterfaceEventsSink_OnResetRibbonInterfaceEventHandler(OnResetRibbonInterface);
 
                 // Create Button Definition
-                createdAddInButton = Utilities.CreateButtonDefinition("ExtendedAnalyzeInterference", "ExtendedAnalyzeInterference", "", "ButtonResources");
+                createdAddInButton = Utilities.CreateButtonDefinition(InvApp,"ExtendedAnalyzeInterference", "ExtendedAnalyzeInterference", "", "ButtonResources");
                 createdAddInButton.OnExecute += new ButtonDefinitionSink_OnExecuteEventHandler(OnAddInButtonExecute);
 
                 if (firstTime)
@@ -72,7 +74,7 @@ namespace ExtendedAnalyzeInterference
             // Release objects.
             createdAddInButton = null;
             uiEvents = null;
-            Globals.InvApp = null;
+            InvApp = null;
             createdAddInButton.OnExecute -= new ButtonDefinitionSink_OnExecuteEventHandler(OnAddInButtonExecute);
 
             GC.Collect();
@@ -101,30 +103,37 @@ namespace ExtendedAnalyzeInterference
 
         private void OnResetRibbonInterface(NameValueMap Context)
         {
-            // リボンがリセットされたので、アドインのユーザーインターフェースを再度追加します。
             AddToUserInterface();
         }
 
         private void OnAddInButtonExecute(NameValueMap Context)
         {
-            var mainWindow = new AnalyzeControlWindow();
-            mainWindow.Show();
-            //var mainWindow = containerProvider.Resolve<AnalysisStartWindow>();
+            //if(InvApp.ActiveDocumentType==DocumentTypeEnum.kAssemblyDocumentObject)
+            //{
+            AnalyzeInterference.Globals.InvApp = InvApp;
+            var startWindow = new StartWindow();
+            startWindow.Show();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("アセンブリドキュメントで実行してください。");
+            //}
+
         }
 
         private void AddToUserInterface()
         {
 
-            foreach (Ribbon ribbon in Globals.InvApp.UserInterfaceManager.Ribbons)
+            foreach (Ribbon ribbon in InvApp.UserInterfaceManager.Ribbons)
             {
                 RibbonTab ribbonTab;
                 try
                 {
-                    ribbonTab = ribbon.RibbonTabs["Add-In"];
+                    ribbonTab = ribbon.RibbonTabs["AddIn"];
                 }
                 catch
                 {
-                    ribbonTab = ribbon.RibbonTabs.Add("マクロ", "Add-In", Globals.AddInClientID);
+                    ribbonTab = ribbon.RibbonTabs.Add("アドイン", "AddIn", Globals.AddInClientID);
                 }
 
                 RibbonPanel customPanel;
@@ -145,4 +154,12 @@ namespace ExtendedAnalyzeInterference
         }
         #endregion
     }
+
+    internal class Globals
+    {
+        public const string SimpleAddInClientID = "4571000a-b104-4c29-9f85-04d03e740459";
+        public const string AddInClientID = "{" + SimpleAddInClientID + "}";
+    }
+
 }
+

@@ -4,7 +4,7 @@
   <ClientId>{4571000a-b104-4c29-9f85-04d03e740459}</ClientId>
   <DisplayName>ExtendedAnalyzeInterference</DisplayName>
   <Description>ExtendedAnalyzeInterference</Description>
-  <Assembly>ExtendedAnalyzeInterference.dll</Assembly>
+  <Assembly>AddInButtonModule.dll</Assembly>
   <LoadOnStartUp>1</LoadOnStartUp>
   <UserUnloadable>1</UserUnloadable>
   <Hidden>0</Hidden>

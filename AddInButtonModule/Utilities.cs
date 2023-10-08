@@ -11,12 +11,12 @@ namespace ExtendedAnalyzeInterference
     public class Utilities
     {
         #region Simplified Button Creation
-        public static ButtonDefinition CreateButtonDefinition(string DisplayName, string InternalName, string ToolTip, string IconFolder)
+        public static ButtonDefinition CreateButtonDefinition(Inventor.Application InvApp,string DisplayName, string InternalName, string ToolTip, string IconFolder)
         {
             ButtonDefinition testDef = null;
             try
             {
-                testDef = (ButtonDefinition)Globals.InvApp.CommandManager.ControlDefinitions[InternalName];
+                testDef = (ButtonDefinition)InvApp.CommandManager.ControlDefinitions[InternalName];
             }
             catch (Exception)
             {
@@ -82,7 +82,7 @@ namespace ExtendedAnalyzeInterference
 
             try
             {
-                ControlDefinitions controlDefs = Globals.InvApp.CommandManager.ControlDefinitions;
+                ControlDefinitions controlDefs = InvApp.CommandManager.ControlDefinitions;
                 ButtonDefinition btnDef = controlDefs.AddButtonDefinition(DisplayName,
                                                                          InternalName,
                                                                          CommandTypesEnum.kShapeEditCmdType,

@@ -11,17 +11,20 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AnalyzeInterference.ViewModels;
 
 namespace AnalyzeInterference.Views
 {
     /// <summary>
-    /// AnalyzeControlWindow.xaml の相互作用ロジック
+    /// StartWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class AnalyzeControlWindow : Window
+    public partial class StartWindow : Window
     {
-        public AnalyzeControlWindow()
+        public StartWindow()
         {
             InitializeComponent();
+
         }
+
     }
 }
