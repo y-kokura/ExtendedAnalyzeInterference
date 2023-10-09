@@ -14,68 +14,35 @@ using System.Windows;
 
 namespace AnalyzeInterference.ViewModels
 {
-
-
-    internal class StartWindowViewModel: BindableBase
+    internal class StartWindowViewModel : BindableBase
     {
-        public DelegateCommand StartAnalysisCommand { get; private set; }
-        public DelegateCommand CancelCommand { get; private set; }
+        public DelegateCommand StartAnalysisCommand { get;  }
+        public DelegateCommand CancelCommand { get;}
 
-        #region "RadioButton Property"
-        private bool _allComponent;
-        public bool AllComponent
-        {
-            get => _allComponent;
-            set => SetProperty(ref _allComponent, value);
-        }
 
-        private bool _selectedComponent;
-        public bool SelectedComponent
-        {
-            get => _selectedComponent;
-            set => SetProperty(ref _selectedComponent, value);
-        }
-
+        #region"Selection of Interference Analysis Target"
+        public bool AllComponent { get; set; }
+        public bool SelectedComponent { get; set; }
         #endregion
 
         #region "CheckBox Property"
-        private bool _kReferenceBOM;
-        public bool kReferenceBOM
-        {
-            get => _kReferenceBOM;
-            set => SetProperty(ref _kReferenceBOM, value);
-        }
 
-        private bool _kPhantomBOM;
-        public bool kPhantomBOM
-        {
-            get => _kPhantomBOM;
-            set => SetProperty(ref _kPhantomBOM, value);
-        }
-
-        private bool _disable;
-        public bool Disable
-        {
-            get => _disable;
-            set => SetProperty(ref _disable, value);
-        }
-
-        private bool _hidden;
-        public bool Hidden
-        {
-            get => _hidden;
-            set => SetProperty(ref _hidden, value);
-        }
+        public bool kReferenceBOM { get; set; }
+        public bool kPhantomBOM { get; set; }
+        public bool Disable { get; set; }
+        public bool Hidden { get; set; }
         #endregion
+
+
 
         public StartWindowViewModel()
         {
             // 初期値を設定
-            AllComponent=true;
+            AllComponent = true;
             SelectedComponent = false;
             Disable = true;
             Hidden = true;
-            kReferenceBOM= true;
+            kReferenceBOM = true;
             kPhantomBOM = false;
 
             // コマンドの初期化
@@ -87,12 +54,26 @@ namespace AnalyzeInterference.ViewModels
 
         private void ExecuteStartAnalysis()
         {
-
+            UpdateModel(AnalyzeLogic.Instance);
+            AnalyzeLogic.Instance.RunAnalysis();
         }
         public void ExecuteCancel()
         {
-            System.Windows.Application.Current.Shutdown();
+            return;
+            //System.Windows.Application.Current.Shutdown();
         }
+
+        public void UpdateModel(AnalyzeLogic model){
+
+            model.AllComponent = AllComponent;
+            model.SelectedComponent = SelectedComponent;
+            model.kReferenceBOM = kReferenceBOM;
+            model.kPhantomBOM = kPhantomBOM;
+            model.Disable = Disable;
+            model.Hidden = Hidden;
+        }
+
+
     }
 
 }

@@ -9,7 +9,7 @@ namespace AnalyzeInterference
     public class Globals
     {
         public static Inventor.Application InvApp;
-        public static Inventor.Document ActiveInvDoc;
+        public static Inventor.AssemblyDocument ActiveInvDoc;
 
     }    
 }
