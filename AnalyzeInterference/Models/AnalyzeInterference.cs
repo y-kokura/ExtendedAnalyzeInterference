@@ -25,10 +25,9 @@ namespace AnalyzeInterference.Models
         void CategorizeOccurrence(ComponentOccurrence occurrence);
         bool LoopContinueCheck(ComponentOccurrence occurrence);
         void AddCollection(ComponentOccurrence occurrence, List<ComponentData> list );
-        void AddSubOccurrence(ComponentOccurrence occurrence, List<ComponentData> list);
+        void AddSubOccurrence(ComponentOccurrence occurrence, ComponentData componentData);
 
     }
-
 
     public abstract class BaseAnalyzeComponent : IAnalyzeTargets
     {
@@ -184,10 +183,12 @@ namespace AnalyzeInterference.Models
         }
     }
 
+
     public class AllComponent : BaseAnalyzeComponent
     {
         public override void Targets()
         {
+            if (Globals.ActiveInvDoc.ComponentDefinition.Occurrences.Count <= 1) return;
             foreach (ComponentOccurrence occurrence in Globals.ActiveInvDoc.ComponentDefinition.Occurrences)
             {
                 //AllComponentCollection.Add(occurrence);
@@ -273,15 +274,6 @@ namespace AnalyzeInterference.Models
             analysisInstance.Targets();
 
 
-
-
-
-
-
-
-
-            // ObjectCollectionを作成
-            ObjectCollection oCollection = Globals.InvApp.TransientObjects.CreateObjectCollection();
 
         }
     }

@@ -113,6 +113,9 @@ namespace ExtendedAnalyzeInterference
             AnalyzeInterference.Globals.InvApp = InvApp;
             var startWindow = new StartWindow();
             startWindow.Show();
+
+            var resultWindow = new ResultWindow();
+            resultWindow.Show();
             //}
             //else
             //{

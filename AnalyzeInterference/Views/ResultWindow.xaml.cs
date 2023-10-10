@@ -12,19 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-
 namespace AnalyzeInterference.Views
 {
     /// <summary>
-    /// StartWindow.xaml の相互作用ロジック
+    /// ResultWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class StartWindow : Window
+    public partial class ResultWindow : Window
     {
-        public StartWindow()
+        public ResultWindow()
         {
             InitializeComponent();
-
         }
-
     }
 }
