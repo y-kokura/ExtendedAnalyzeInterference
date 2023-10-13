@@ -3,8 +3,8 @@ using Microsoft.Win32;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
-using AnalyzeInterference;
 using AnalyzeInterference.Views;
+using AnalyzeInterference.ViewModels;
 
 namespace ExtendedAnalyzeInterference
 {
@@ -108,19 +108,13 @@ namespace ExtendedAnalyzeInterference
 
         private void OnAddInButtonExecute(NameValueMap Context)
         {
-            //if(InvApp.ActiveDocumentType==DocumentTypeEnum.kAssemblyDocumentObject)
-            //{
-            AnalyzeInterference.Globals.InvApp = InvApp;
+
+            AnalyzeInterference.Common.Globals.InvApp = InvApp;
+
             var startWindow = new StartWindow();
             startWindow.Show();
 
-            var resultWindow = new ResultWindow();
-            resultWindow.Show();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("アセンブリドキュメントで実行してください。");
-            //}
+
 
         }
 

@@ -3,7 +3,7 @@ using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 
-namespace AnalyzeInterference
+namespace AnalyzeInterference.Common
 {
     public class AnalyzeInterferenceModule : IModule
     {

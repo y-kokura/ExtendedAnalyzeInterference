@@ -16,6 +16,11 @@ namespace AnalyzeInterference.ViewModels
 {
     internal class StartWindowViewModel : BindableBase
     {
+        // シングルトンのインスタンスを作成
+        private static StartWindowViewModel _instance;
+        public static StartWindowViewModel Instance => _instance ?? (_instance = new StartWindowViewModel());
+
+
         public DelegateCommand StartAnalysisCommand { get;  }
         public DelegateCommand CancelCommand { get;}
 
@@ -48,22 +53,25 @@ namespace AnalyzeInterference.ViewModels
             // コマンドの初期化
             StartAnalysisCommand = new DelegateCommand(ExecuteStartAnalysis);
             CancelCommand = new DelegateCommand(ExecuteCancel);
-        }
 
+        }
+        
 
 
         private void ExecuteStartAnalysis()
         {
-            UpdateModel(AnalyzeLogic.Instance);
-            AnalyzeLogic.Instance.RunAnalysis();
+            UpdateModel(OccurrenceCategorizer.Instance);
+            AnalyzeInterferenceWrapper analyzeInterferenceWrapper = new AnalyzeInterferenceWrapper();
+            analyzeInterferenceWrapper.ExecuteAnalysis();
+
         }
-        public void ExecuteCancel()
+        private void ExecuteCancel()
         {
             return;
             //System.Windows.Application.Current.Shutdown();
         }
 
-        public void UpdateModel(AnalyzeLogic model){
+        public void UpdateModel(OccurrenceCategorizer model){
 
             model.AllComponent = AllComponent;
             model.SelectedComponent = SelectedComponent;
