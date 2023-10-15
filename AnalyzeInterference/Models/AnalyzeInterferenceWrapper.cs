@@ -24,7 +24,9 @@ namespace AnalyzeInterference.Models
             //アセンブリドキュメント内のComponentOccurrenceを分類する。
             (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection) =OccurrenceCategorizer.Instance.StartCategorize();
             (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) =InterferenceAnalyzer.Instance.InterferenceAnalysisExcute(ScrewComponentCollection, NonScrewComponentCollection);
+            
 
+            InterferenceResultAggregator.AggregateResults();
         }
     }
 }

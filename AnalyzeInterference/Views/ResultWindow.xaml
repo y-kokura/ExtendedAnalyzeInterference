@@ -16,7 +16,21 @@
     <Window.DataContext>
         <local:ResultWindowViewModel />
     </Window.DataContext>
-    <Grid >
-        <DataGrid d:ItemsSource="{d:SampleData ItemCount=10"/>
+    <Grid>
+        <DataGrid
+            x:Name="dataGrid"
+            AutoGenerateColumns="False"
+            ItemsSource="{Binding DisplayData}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
+
 </Window>

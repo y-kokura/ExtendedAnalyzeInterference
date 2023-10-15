@@ -10,15 +10,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Collections.ObjectModel;
+
 
 
 namespace AnalyzeInterference.ViewModels
 {
-    internal class ResultWindowViewModel : BindableBase
+    public class ResultWindowViewModel : BindableBase
     {
-        public ResultWindowViewModel()
+        private readonly ResultData _model;
+        private ObservableCollection<string> _displayData;
+
+        public ObservableCollection<string> DisplayData
         {
-            // コマンドの初期化
+            get => _displayData;
+            set => SetProperty(ref _displayData, value);
+        }
+
+        public ResultWindowViewModel(ResultData model)
+        {
+            _model = model;
+            DisplayData = new ObservableCollection<string>(_model.DataList);
+        }
+
+        // 何らかのコマンドまたはメソッドを通じて、Model のデータを操作
+        public void AddNewData(string newData)
+        {
+            _model.AddData(newData);
+            DisplayData.Add(newData);
         }
     }
+
 }

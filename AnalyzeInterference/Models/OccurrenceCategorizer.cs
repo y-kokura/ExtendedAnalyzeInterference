@@ -242,7 +242,6 @@ namespace AnalyzeInterference.Models
                     InterferenceOccurrences2 = new List<ComponentOccurrence>(),
                     SubOccurrences = Globals.InvApp.TransientObjects.CreateObjectCollection(),
                     SubOccurrencesKey = new List<byte[]>(),
-                    InterferenceCountType = "干渉数 : 0"
                 };
 
                 // Add the new data to the list
