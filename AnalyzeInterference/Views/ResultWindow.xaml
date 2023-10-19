@@ -25,11 +25,6 @@
             ScrollViewer.CanContentScroll="False"
             SelectedItem="{Binding SelectedComponentData}">
 
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding RowDoubleClickCommand}" CommandParameter="{Binding ComponentOccurrence.Name}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
 
 
             <DataGrid.Columns>
@@ -47,7 +42,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!--  他の列を追加できます  -->
             </DataGrid.Columns>
         </DataGrid>
 
