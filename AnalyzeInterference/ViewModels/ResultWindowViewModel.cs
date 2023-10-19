@@ -11,34 +11,50 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Collections.ObjectModel;
+using Microsoft.Xaml.Behaviors;
 
 
 
 namespace AnalyzeInterference.ViewModels
 {
-    public class ResultWindowViewModel : BindableBase
+    internal class ResultWindowViewModel : BindableBase
     {
-        private readonly ResultData _model;
-        private ObservableCollection<string> _displayData;
+        private ObservableCollection<ComponentData> _componentDatas;
 
-        public ObservableCollection<string> DisplayData
+        public ObservableCollection<ComponentData> ComponentDatas
         {
-            get => _displayData;
-            set => SetProperty(ref _displayData, value);
+            get { return _componentDatas; }
+            set { SetProperty(ref _componentDatas, value); }
         }
 
-        public ResultWindowViewModel(ResultData model)
+        public DelegateCommand<object> RowDoubleClickCommand { get; private set; }
+
+        public ResultWindowViewModel(ObservableCollection<ComponentData> data)
         {
-            _model = model;
-            DisplayData = new ObservableCollection<string>(_model.DataList);
+            ComponentDatas = data;
         }
 
-        // 何らかのコマンドまたはメソッドを通じて、Model のデータを操作
-        public void AddNewData(string newData)
+        public ResultWindowViewModel()
         {
-            _model.AddData(newData);
-            DisplayData.Add(newData);
+            try {
+                ComponentDatas = new ObservableCollection<ComponentData>();
+                RowDoubleClickCommand = new DelegateCommand<object>(RowDoubleClicked);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
+
+        private void RowDoubleClicked(object selectedItem)
+        {
+            if (selectedItem is ComponentData componentData)
+            {
+                MessageBox.Show($"Name: {componentData.ComponentOccurrence.Name}");
+            }
         }
     }
-
 }
+

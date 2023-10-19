@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnalyzeInterference.Models
 {
-    internal class InterferenceHighlighter
+    internal class OccurrenceHighlighter
     {
     }
 }

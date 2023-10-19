@@ -23,24 +23,5 @@ namespace AnalyzeInterference.Models
         public List<ComponentOccurrence> InterferenceOccurrences2 { get; set; }
         public ObjectCollection SubOccurrences { get; set; }
         public List<byte[]> SubOccurrencesKey { get; set; }
-        public string InterferenceCountType { get; set; }
     }
-
-    public class ResultData
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public List<string> DataList { get; set; }
-
-        public ResultData()
-        {
-            DataList = new List<string>();
-        }
-
-        public void AddData(string newData)
-        {
-            DataList.Add(newData);
-        }
-    }
-
 }

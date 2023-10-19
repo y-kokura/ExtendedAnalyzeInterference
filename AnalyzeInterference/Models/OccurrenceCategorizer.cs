@@ -29,12 +29,12 @@ namespace AnalyzeInterference.Models
         /// <summary>
         /// 干渉解析実行のために、解析対象のComponentOccurrenceをObjectCollectionにネジとネジ以外で分類します。
         /// </summary>
-        public (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection) StartCategorize()
+        public (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList) StartCategorize()
         {
             if (Globals.InvApp.ActiveDocumentType != DocumentTypeEnum.kAssemblyDocumentObject)
             {
                 MessageBox.Show("アセンブリドキュメントで実行してください。");
-                return (null,null);
+                return (null,null,null);
             }
 
             //アクティブドキュメントを取得
@@ -44,7 +44,7 @@ namespace AnalyzeInterference.Models
             IAnalyzeTargets analysisInstance = CreateAnalyzeInstance(AllComponent, SelectedComponent);
 
             // 解析処理の実行
-             return analysisInstance.ComponentOccurrenceCateforize();
+             return analysisInstance.CategorizeOccurrence ();
 
         }
 
@@ -58,7 +58,7 @@ namespace AnalyzeInterference.Models
             ObjectCollection NonScrewComponentCollection { get; set; }
             List<ComponentData> InterferenceResultsList { get; set; }
 
-            (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection) ComponentOccurrenceCateforize();
+            (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList) CategorizeOccurrence ();
 
         }
 
@@ -87,7 +87,7 @@ namespace AnalyzeInterference.Models
             }
 
 
-            public abstract (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection) ComponentOccurrenceCateforize();
+            public abstract (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList) CategorizeOccurrence ();
 
         }
 
@@ -96,15 +96,15 @@ namespace AnalyzeInterference.Models
         /// </summary>
         public class AllAnalysisTarget : BaseAnalyzeComponent
         {
-            public override (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection) ComponentOccurrenceCateforize()
+            public override (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList) CategorizeOccurrence ()
             {
-                if (Globals.ActiveInvDoc.ComponentDefinition.Occurrences.Count <= 1) return (ScrewComponentCollection, NonScrewComponentCollection); ;
+                if (Globals.ActiveInvDoc.ComponentDefinition.Occurrences.Count <= 1) return (ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList); 
                 foreach (ComponentOccurrence occurrence in Globals.ActiveInvDoc.ComponentDefinition.Occurrences)
                 {
                     OccurrenceCategorizer occurrenceCategorizer = new OccurrenceCategorizer();
                     occurrenceCategorizer.CategorizeOccurrence(occurrence, ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
                 }
-                return (ScrewComponentCollection, NonScrewComponentCollection);
+                return (ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
             }
         }
 
@@ -114,9 +114,9 @@ namespace AnalyzeInterference.Models
         /// </summary>
         public class SelectedAnalysisTarget : BaseAnalyzeComponent
         {
-            public override (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection) ComponentOccurrenceCateforize()
+            public override (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList) CategorizeOccurrence ()
             {
-                if (Globals.ActiveInvDoc.SelectSet.Count <= 1) return (ScrewComponentCollection, NonScrewComponentCollection); ;
+                if (Globals.ActiveInvDoc.SelectSet.Count <= 1) return (ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList); 
 
                 foreach (ComponentOccurrence occurrence in Globals.ActiveInvDoc.SelectSet)
                 {
@@ -124,7 +124,7 @@ namespace AnalyzeInterference.Models
                     occurrenceCategorizer.CategorizeOccurrence(occurrence, ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
 
                 }
-                return (ScrewComponentCollection, NonScrewComponentCollection);
+                return (ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
             }
         }
 
@@ -180,7 +180,7 @@ namespace AnalyzeInterference.Models
                 {
                     foreach (ComponentOccurrence subOccurrence in occurrence.SubOccurrences)
                     {
-                        CategorizeOccurrence(occurrence, ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
+                        CategorizeOccurrence(subOccurrence, ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
                     }
                 }
                 else
@@ -218,14 +218,18 @@ namespace AnalyzeInterference.Models
         /// </summary>
         /// <param name="occurrence">追加または検証されるComponentOccurrenceオブジェクト。</param>
         /// <param name="list">新しいComponentDataオブジェクトを追加する対象のリスト。</param>
-        private void AddCollection(ComponentOccurrence occurrence, List<ComponentData> list)
+        private void AddCollection(ComponentOccurrence occurrence, List<ComponentData> componentDataList)
         {
-            byte[] referenceKey = new byte[] { };
-            occurrence.GetReferenceKey(referenceKey);
+            //byte[] referenceKey = new byte[] { };
+            //occurrence.GetReferenceKey(referenceKey);
+            System.Array tempArray = new byte[1];  // 一時的な System.Array
+            occurrence.GetReferenceKey(ref tempArray);  // ref キーワードを使用
+            byte[] referenceKey = (byte[])tempArray;  // System.Array を byte[] にキャスト
 
 
             int threadCount = FeaturePropertyChecker.ThreadFeatureCounter(occurrence);
-            var foundItem = list.FirstOrDefault(t => t.ReferenceKey.SequenceEqual(referenceKey));
+            var foundItem = componentDataList.FirstOrDefault(t => t.ReferenceKey.SequenceEqual(referenceKey));
+            //var foundItem = componentDataList.FirstOrDefault(t => t.ReferenceKey == referenceKey);
 
 
             if (foundItem == null)
@@ -245,9 +249,13 @@ namespace AnalyzeInterference.Models
                 };
 
                 // Add the new data to the list
-                list.Add(newComponentData);
+                componentDataList.Add(newComponentData);
 
                 AddSubOccurrence(occurrence, newComponentData);
+            }
+            else
+            {
+                MessageBox.Show("AddCollection : error"); return;
             }
         }
 
@@ -271,8 +279,11 @@ namespace AnalyzeInterference.Models
             }
             else
             {
-                byte[] referenceKey = new byte[] { };
-                occurrence.GetReferenceKey(referenceKey);
+                //byte[] referenceKey = new byte[] { };
+                //occurrence.GetReferenceKey(referenceKey);
+                System.Array tempArray = new byte[1];  // 一時的な System.Array
+                occurrence.GetReferenceKey(ref tempArray);  // ref キーワードを使用
+                byte[] referenceKey = (byte[])tempArray;  // System.Array を byte[] にキャスト
 
                 long tappedCount = FeaturePropertyChecker.TappedFeatureCounter(occurrence);
 

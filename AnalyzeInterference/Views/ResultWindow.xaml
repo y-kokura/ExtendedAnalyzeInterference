@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:AnalyzeInterference.ViewModels"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="干渉解析"
@@ -20,17 +21,36 @@
         <DataGrid
             x:Name="dataGrid"
             AutoGenerateColumns="False"
-            ItemsSource="{Binding DisplayData}">
+            ItemsSource="{Binding ComponentDatas}"
+            ScrollViewer.CanContentScroll="False"
+            SelectedItem="{Binding SelectedComponentData}">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding RowDoubleClickCommand}" CommandParameter="{Binding ComponentOccurrence.Name}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Name">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock Text="{Binding ComponentOccurrence.Name}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="InterferenceCount">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding InterferenceCount}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--  他の列を追加できます  -->
             </DataGrid.Columns>
         </DataGrid>
+
     </Grid>
 
 </Window>
