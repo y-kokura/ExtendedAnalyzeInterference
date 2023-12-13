@@ -24,12 +24,9 @@ namespace AnalyzeInterference.Models
                 return;
             }
 
-            foreach (InterferenceResult result in interferenceResults)
+            foreach (InterferenceResult interferenceResult in interferenceResults)
             {
-                ComponentOccurrence firstOccurrence = result.OccurrenceOne;
-                ComponentOccurrence secondOccurrence = result.OccurrenceTwo;
-
-                AddOrUpdateResult(firstOccurrence, secondOccurrence, result.InterferenceBody, resultDataList);
+                DistributeResults(interferenceResult, resultDataList);
             }
         }
 
@@ -40,20 +37,25 @@ namespace AnalyzeInterference.Models
         /// <param name="secondOccurrence">InterferenceResult.OccurrenceTwo</param>
         /// <param name="surfaceBody">InterferenceResult.InterferenceBody</param>
         /// <param name="resultDataList">集計用のリスト</param>
-        private void AddOrUpdateResult(ComponentOccurrence firstOccurrence, ComponentOccurrence secondOccurrence, SurfaceBody surfaceBody, List<ComponentData> resultDataList)
+        private void DistributeResults(InterferenceResult interferenceResult, List<ComponentData> resultDataList)
         {
+            ComponentOccurrence firstOccurrence = interferenceResult.OccurrenceOne;
+            ComponentOccurrence secondOccurrence = interferenceResult.OccurrenceTwo;
+            SurfaceBody surfaceBody = interferenceResult.InterferenceBody;
+
+
             var foundItem1 = FindItemByReferenceKey(firstOccurrence, resultDataList);
             var foundItem2 = FindItemByReferenceKey(secondOccurrence, resultDataList);
 
             if (foundItem1 != null && foundItem2 != null && ReferenceEquals(foundItem1, foundItem2))
             {
-                UpdateInterferenceData(foundItem1, firstOccurrence, secondOccurrence, surfaceBody);
+                AddComponentData(foundItem1, interferenceResult);
                 return;
             }
             else
             {
-                UpdateInterferenceData(foundItem1, firstOccurrence, secondOccurrence, surfaceBody);
-                UpdateInterferenceData(foundItem2, firstOccurrence, secondOccurrence, surfaceBody);
+                AddComponentData(foundItem1, interferenceResult);
+                AddComponentData(foundItem2, interferenceResult);
             }
         }
 
@@ -73,8 +75,8 @@ namespace AnalyzeInterference.Models
             occurrence.GetReferenceKey(ref tempArray);  // ref キーワードを使用
             byte[] referenceKey = (byte[])tempArray;  // System.Array を byte[] にキャスト
 
-            Debug.Print(occurrence.Name);
-            Debug.Print(BitConverter.ToString(referenceKey));
+            //Debug.Print(occurrence.Name);
+            //Debug.Print(BitConverter.ToString(referenceKey));
 
 
 
@@ -93,14 +95,40 @@ namespace AnalyzeInterference.Models
         /// <param name="firstOccurrence">InterferenceResult.OccurrenceOne</param>
         /// <param name="secondOccurrence">InterferenceResult.OccurrenceTwo</param>
         /// <param name="surfaceBody">InterferenceResult.InterferenceBody</param>
-        private void UpdateInterferenceData(ComponentData item, ComponentOccurrence firstOccurrence, ComponentOccurrence secondOccurrence, SurfaceBody surfaceBody)
+        private void AddComponentData(ComponentData item, InterferenceResult interferenceResult)
         {
             if (item == null) return;
 
+            ComponentOccurrence firstOccurrence = interferenceResult.OccurrenceOne;
+            ComponentOccurrence secondOccurrence = interferenceResult.OccurrenceTwo;
+            SurfaceBody surfaceBody = interferenceResult.InterferenceBody;
+            double volume=interferenceResult.Volume;
+
+            if (IsThreadTypeInterference(surfaceBody, volume)) item.ThreadTypeInterferenceCount++;
             item.InterferenceCount++;
             item.InterferenceBodies.Add(surfaceBody);
             item.InterferenceOccurrences1.Add(firstOccurrence);
             item.InterferenceOccurrences2.Add(secondOccurrence);
+        }
+
+        private bool IsThreadTypeInterference(SurfaceBody surfaceBody , Double interferenceVolume)
+        {
+            OrientedBox orientedBox = surfaceBody.OrientedMinimumRangeBox;
+            double lengthOne = orientedBox.DirectionOne.Length;
+            double lengthTwo= orientedBox.DirectionTwo.Length;
+            double lengthThree=orientedBox.DirectionThree.Length;
+
+            if (!AreTwoValuesAlmostEqual(lengthOne, lengthTwo, lengthThree)) return false;
+
+            var biggestVolume = Math.PI* lengthOne* lengthTwo* lengthThree / 4 ;
+            var volumeRatio = interferenceVolume / biggestVolume;
+
+            return volumeRatio >= 0.2 && volumeRatio <= 0.4;
+        }
+
+        private bool AreTwoValuesAlmostEqual(double a, double b, double c, double tolerance = 1e-6)
+        {
+            return Math.Abs(a - b) < tolerance || Math.Abs(a - c) < tolerance || Math.Abs(b - c) < tolerance;
         }
 
     }

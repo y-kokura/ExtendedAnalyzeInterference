@@ -40,7 +40,6 @@ namespace AnalyzeInterference.Models
             //アクティブドキュメントを取得
             Globals.ActiveInvDoc = (Inventor.AssemblyDocument)Globals.InvApp.ActiveDocument;
 
-
             IAnalyzeTargets analysisInstance = CreateAnalyzeInstance(AllComponent, SelectedComponent);
 
             // 解析処理の実行
@@ -239,7 +238,7 @@ namespace AnalyzeInterference.Models
                     ComponentOccurrence = occurrence,
                     ReferenceKey = referenceKey,
                     ThreadCount = threadCount,
-                    TappdCount = 0,
+                    TappedCount = 0,
                     InterferenceCount = 0,
                     InterferenceBodies = Globals.InvApp.TransientObjects.CreateObjectCollection(),
                     InterferenceOccurrences1 = new List<ComponentOccurrence>(),
@@ -287,7 +286,7 @@ namespace AnalyzeInterference.Models
 
                 long tappedCount = FeaturePropertyChecker.TappedFeatureCounter(occurrence);
 
-                componentData.TappdCount += tappedCount;
+                componentData.TappedCount += tappedCount;
                 componentData.SubOccurrences.Add(occurrence);
                 componentData.SubOccurrencesKey.Add(referenceKey);
             }

@@ -24,17 +24,20 @@ namespace AnalyzeInterference.Models
         /// </summary>
         public void ExecuteAnalysis()
         {
-            //アセンブリドキュメント内のComponentOccurrenceを分類する。
+            //アセンブリドキュメント内のComponentOccurrenceを分類する(ネジを含む部品か含まない部品か)。
             (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList) =OccurrenceCategorizer.Instance.StartCategorize();
-            (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) =InterferenceAnalyzer.Instance.InterferenceAnalysisExcute(ScrewComponentCollection, NonScrewComponentCollection);
-            
+            (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) =InterferenceAnalyzer.Instance.InterferenceAnalysisExecute(ScrewComponentCollection, NonScrewComponentCollection);
 
+            Test.test1(AnalyzeResultsScrew);
+            Test.test1(AnalyzeResultsBoth);
             InterferenceResultAggregator.Instance.AggregateResults(InterferenceResultsList, AnalyzeResultsBoth );
             InterferenceResultAggregator.Instance.AggregateResults(InterferenceResultsList, AnalyzeResultsScrew);
 
+            HighlightFunctionality.Instance.ComponentHighlight(InterferenceResultsList);
+
             var resultWindowViewModel = new ResultWindowViewModel(new ObservableCollection<ComponentData>(InterferenceResultsList));
             var resultWindow = new ResultWindow();
-            resultWindow.DataContext = resultWindowViewModel;  // この行を追加
+            resultWindow.DataContext = resultWindowViewModel; 
             resultWindow.Show();
 
 

@@ -21,24 +21,47 @@
         <DataGrid
             x:Name="dataGrid"
             AutoGenerateColumns="False"
-            ItemsSource="{Binding ComponentDatas}"
+            ItemsSource="{Binding ComponentData}"
             ScrollViewer.CanContentScroll="False"
-            SelectedItem="{Binding SelectedComponentData}">
+            SelectedItem="{Binding SelectedComponent}"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserResizeRows="False"
+            VirtualizingPanel.ScrollUnit="Pixel">
 
-
+            <DataGrid.InputBindings>
+                <MouseBinding 
+                    Command="{Binding DataGridDoubleClickCommand}"
+                    CommandParameter="{Binding SelectedComponent}"          
+                    MouseAction="LeftDoubleClick"/>
+            </DataGrid.InputBindings>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Name">
+                <DataGridTemplateColumn Header="名前">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding ComponentOccurrence.Name}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="InterferenceCount">
+                <DataGridTemplateColumn Header="ネジ数">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ThreadCount}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="干渉数">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding InterferenceCount}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="ネジ干渉数">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ThreadTypeInterferenceCount}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

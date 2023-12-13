@@ -23,5 +23,10 @@ namespace AnalyzeInterference.Views
         {
             InitializeComponent();
         }
+
+        private void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
