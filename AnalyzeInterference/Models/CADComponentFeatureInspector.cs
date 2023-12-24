@@ -8,7 +8,7 @@ using Inventor;
 
 namespace AnalyzeInterference.Models
 {
-    internal class FeaturePropertyChecker
+    internal class CADComponentFeatureInspector
     {
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace AnalyzeInterference.Models
         /// </summary>
         /// <param name="occurrence">カウント対象のComponentOccurrence</param>
         /// <returns>雄ネジの要素数を返します。</returns>
-        public static int ThreadFeatureCounter(ComponentOccurrence occurrence)
+        public static int CountThreadFeatures(ComponentOccurrence occurrence)
         {
             int ThreadCount = 0;
             ComponentDefinition compDef = occurrence.Definition; 
@@ -42,7 +42,7 @@ namespace AnalyzeInterference.Models
         /// </summary>
         /// <param name="occurrence">カウント対象のComponentOccurrence</param>
         /// <returns>雌ネジの要素数を返します。</returns>
-        public static int TappedFeatureCounter(ComponentOccurrence occurrence)
+        public static int CountTappedFeatures(ComponentOccurrence occurrence)
         {
             int HoleCount = 0;
             ComponentDefinition compDef = occurrence.Definition;

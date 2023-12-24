@@ -26,7 +26,7 @@ namespace AnalyzeInterference.Models
         {
             //アセンブリドキュメント内のComponentOccurrenceを分類する(ネジを含む部品か含まない部品か)。
             (ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList) =OccurrenceCategorizer.Instance.StartCategorize();
-            (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) =InterferenceAnalyzer.Instance.InterferenceAnalysisExecute(ScrewComponentCollection, NonScrewComponentCollection);
+            (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) = CADAssemblyInterferenceAnalyzer.Instance.ExecuteInterferenceAnalysis(ScrewComponentCollection, NonScrewComponentCollection);
 
             Test.test1(AnalyzeResultsScrew);
             Test.test1(AnalyzeResultsBoth);

@@ -163,7 +163,7 @@ namespace AnalyzeInterference.Models
         public void CategorizeOccurrence(ComponentOccurrence occurrence, ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList)
         {
             if (LoopContinueCheck(occurrence)) return;
-            int ThreadCount = FeaturePropertyChecker.ThreadFeatureCounter(occurrence);
+            int ThreadCount = CADComponentFeatureInspector.CountThreadFeatures(occurrence);
 
 
             if (ThreadCount > 0)
@@ -226,7 +226,7 @@ namespace AnalyzeInterference.Models
             byte[] referenceKey = (byte[])tempArray;  // System.Array を byte[] にキャスト
 
 
-            int threadCount = FeaturePropertyChecker.ThreadFeatureCounter(occurrence);
+            int threadCount = CADComponentFeatureInspector.CountThreadFeatures(occurrence);
             var foundItem = componentDataList.FirstOrDefault(t => t.ReferenceKey.SequenceEqual(referenceKey));
             //var foundItem = componentDataList.FirstOrDefault(t => t.ReferenceKey == referenceKey);
 
@@ -284,7 +284,7 @@ namespace AnalyzeInterference.Models
                 occurrence.GetReferenceKey(ref tempArray);  // ref キーワードを使用
                 byte[] referenceKey = (byte[])tempArray;  // System.Array を byte[] にキャスト
 
-                long tappedCount = FeaturePropertyChecker.TappedFeatureCounter(occurrence);
+                long tappedCount = CADComponentFeatureInspector.CountTappedFeatures(occurrence);
 
                 componentData.TappedCount += tappedCount;
                 componentData.SubOccurrences.Add(occurrence);

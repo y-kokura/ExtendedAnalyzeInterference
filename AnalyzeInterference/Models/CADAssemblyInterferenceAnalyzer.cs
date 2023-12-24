@@ -10,12 +10,12 @@ using AnalyzeInterference.Common;
 
 namespace AnalyzeInterference.Models
 {
-    internal class InterferenceAnalyzer
+    internal class CADAssemblyInterferenceAnalyzer
     {
-        private static InterferenceAnalyzer _instance;
-        public static InterferenceAnalyzer Instance => _instance ?? (_instance = new InterferenceAnalyzer());
+        private static CADAssemblyInterferenceAnalyzer _instance;
+        public static CADAssemblyInterferenceAnalyzer Instance => _instance ?? (_instance = new CADAssemblyInterferenceAnalyzer());
 
-        public (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) InterferenceAnalysisExecute(ObjectCollection ScrewComponentCollection,ObjectCollection NonScrewComponentCollection)
+        public (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) ExecuteInterferenceAnalysis(ObjectCollection ScrewComponentCollection,ObjectCollection NonScrewComponentCollection)
         {
             AssemblyComponentDefinition assemblyCompDef = Globals.ActiveInvDoc.ComponentDefinition;
             InterferenceResults AnalyzeResultsBoth =null;
