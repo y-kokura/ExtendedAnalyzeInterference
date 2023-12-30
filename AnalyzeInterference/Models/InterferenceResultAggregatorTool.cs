@@ -7,10 +7,10 @@ using Inventor;
 
 namespace AnalyzeInterference.Models
 {
-    internal class InterferenceResultAggregator
+    internal class InterferenceResultAggregatorTool
     {
-        private static InterferenceResultAggregator _instance;
-        public static InterferenceResultAggregator Instance => _instance ?? (_instance = new InterferenceResultAggregator());
+        private static InterferenceResultAggregatorTool _instance;
+        public static InterferenceResultAggregatorTool Instance => _instance ?? (_instance = new InterferenceResultAggregatorTool());
 
         /// <summary>
         /// 与えられたInterferenceResultsから集計を行い、resultDataListを更新します。

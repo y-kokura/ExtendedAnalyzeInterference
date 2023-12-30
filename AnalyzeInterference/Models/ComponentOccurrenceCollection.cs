@@ -9,11 +9,11 @@ using System.Windows;
 
 namespace AnalyzeInterference.Models
 {
-    internal class OccurrenceCategorizer
+    internal class ComponentOccurrenceCollection
     {
         // シングルトンのインスタンスを作成
-        private static OccurrenceCategorizer _instance;
-        public static OccurrenceCategorizer Instance => _instance ?? (_instance = new OccurrenceCategorizer());
+        private static ComponentOccurrenceCollection _instance;
+        public static ComponentOccurrenceCollection Instance => _instance ?? (_instance = new ComponentOccurrenceCollection());
 
         #region"Propertys"
         public bool AllComponent { get; set; }
@@ -100,7 +100,7 @@ namespace AnalyzeInterference.Models
                 if (Globals.ActiveInvDoc.ComponentDefinition.Occurrences.Count <= 1) return (ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList); 
                 foreach (ComponentOccurrence occurrence in Globals.ActiveInvDoc.ComponentDefinition.Occurrences)
                 {
-                    OccurrenceCategorizer occurrenceCategorizer = new OccurrenceCategorizer();
+                    ComponentOccurrenceCollection occurrenceCategorizer = new ComponentOccurrenceCollection();
                     occurrenceCategorizer.CategorizeOccurrence(occurrence, ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
                 }
                 return (ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
@@ -119,7 +119,7 @@ namespace AnalyzeInterference.Models
 
                 foreach (ComponentOccurrence occurrence in Globals.ActiveInvDoc.SelectSet)
                 {
-                    OccurrenceCategorizer occurrenceCategorizer = new OccurrenceCategorizer();
+                    ComponentOccurrenceCollection occurrenceCategorizer = new ComponentOccurrenceCollection();
                     occurrenceCategorizer.CategorizeOccurrence(occurrence, ScrewComponentCollection, NonScrewComponentCollection, InterferenceResultsList);
 
                 }
@@ -163,7 +163,7 @@ namespace AnalyzeInterference.Models
         public void CategorizeOccurrence(ComponentOccurrence occurrence, ObjectCollection ScrewComponentCollection, ObjectCollection NonScrewComponentCollection, List<ComponentData> InterferenceResultsList)
         {
             if (LoopContinueCheck(occurrence)) return;
-            int ThreadCount = CADComponentFeatureInspector.CountThreadFeatures(occurrence);
+            int ThreadCount = HoleFeatureCountTool.ThreadFeatures(occurrence);
 
 
             if (ThreadCount > 0)
@@ -226,7 +226,7 @@ namespace AnalyzeInterference.Models
             byte[] referenceKey = (byte[])tempArray;  // System.Array を byte[] にキャスト
 
 
-            int threadCount = CADComponentFeatureInspector.CountThreadFeatures(occurrence);
+            int threadCount = HoleFeatureCountTool.ThreadFeatures(occurrence);
             var foundItem = componentDataList.FirstOrDefault(t => t.ReferenceKey.SequenceEqual(referenceKey));
             //var foundItem = componentDataList.FirstOrDefault(t => t.ReferenceKey == referenceKey);
 
@@ -284,7 +284,7 @@ namespace AnalyzeInterference.Models
                 occurrence.GetReferenceKey(ref tempArray);  // ref キーワードを使用
                 byte[] referenceKey = (byte[])tempArray;  // System.Array を byte[] にキャスト
 
-                long tappedCount = CADComponentFeatureInspector.CountTappedFeatures(occurrence);
+                long tappedCount = HoleFeatureCountTool.TappedFeatures(occurrence);
 
                 componentData.TappedCount += tappedCount;
                 componentData.SubOccurrences.Add(occurrence);

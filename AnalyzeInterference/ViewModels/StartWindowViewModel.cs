@@ -60,9 +60,9 @@ namespace AnalyzeInterference.ViewModels
 
         private void ExecuteStartAnalysis()
         {
-            UpdateModel(OccurrenceCategorizer.Instance);
-            AnalyzeInterferenceWrapper analyzeInterferenceWrapper = new AnalyzeInterferenceWrapper();
-            analyzeInterferenceWrapper.ExecuteAnalysis();
+            UpdateModel(ComponentOccurrenceCollection.Instance);
+            ThreadInterferenceAnalysisWorkFlow threadInterferenceAnalysisWorkFlow = new ThreadInterferenceAnalysisWorkFlow();
+            threadInterferenceAnalysisWorkFlow.RunInterferenceAnalysis();
 
         }
         private void ExecuteCancel()
@@ -71,7 +71,7 @@ namespace AnalyzeInterference.ViewModels
             //System.Windows.Application.Current.Shutdown();
         }
 
-        public void UpdateModel(OccurrenceCategorizer model){
+        public void UpdateModel(ComponentOccurrenceCollection model){
 
             model.AllComponent = AllComponent;
             model.SelectedComponent = SelectedComponent;
