@@ -22,18 +22,13 @@ namespace AnalyzeInterference.Models
             InterferenceResults AnalyzeResultsScrew=null;
             //InterferenceResults resultsNonScrew=null;
 
-            if (ScrewComponentCollection.Count >= 1 && NonScrewComponentCollection.Count >= 1)
-            {
-                AnalyzeResultsBoth = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection, NonScrewComponentCollection);
-                AnalyzeResultsScrew = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection);
-                //assemblyCompDef.AnalyzeInterference(NonScrewComponentCollection);
-            }
-            else if (ScrewComponentCollection.Count >= 1 && NonScrewComponentCollection.Count == 0)
-            {
-                AnalyzeResultsScrew = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection);
-            }
-
+            if(ScrewComponentCollection==0)return(null,null);
+            
+            AnalyzeResultsScrew = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection);
+            if(NonScrewComponentCollection>=1)AnalyzeResultsBoth = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection, NonScrewComponentCollection);
+                        
             return (AnalyzeResultsBoth, AnalyzeResultsScrew);
+
         }
     }
 
