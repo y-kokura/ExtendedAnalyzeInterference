@@ -5,7 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:AnalyzeInterference.ViewModels"
+    xmlns:behaviors="clr-namespace:AnalyzeInterference.Views.Behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
     Title="干渉解析"
     Width="600"
     Height="300"
@@ -27,14 +29,11 @@
             CanUserAddRows="False"
             CanUserDeleteRows="False"
             CanUserResizeRows="False"
-            VirtualizingPanel.ScrollUnit="Pixel">
+            VirtualizingPanel.ScrollUnit="Pixel"
+            SelectionMode="Single"
+            MouseDoubleClick="DataGrid_MouseDoubleClick">
 
-            <DataGrid.InputBindings>
-                <MouseBinding 
-                    Command="{Binding DataGridDoubleClickCommand}"
-                    CommandParameter="{Binding SelectedComponent}"          
-                    MouseAction="LeftDoubleClick"/>
-            </DataGrid.InputBindings>
+
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="名前">

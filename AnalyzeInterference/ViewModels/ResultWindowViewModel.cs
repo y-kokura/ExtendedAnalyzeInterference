@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Collections.ObjectModel;
 using Microsoft.Xaml.Behaviors;
+using System.Windows.Input;
+using System.Windows.Controls;
 
 
 
@@ -21,6 +23,10 @@ namespace AnalyzeInterference.ViewModels
     {
         private ObservableCollection<ComponentData> _componentData;
         private ComponentData _selectedComponent;
+        public DelegateCommand<object> DataGridRowDoubleClickCommand { get; private set; }
+
+
+        public DelegateCommand<object> CellDoubleClickCommand { get; private set; }
 
         public ObservableCollection<ComponentData> ComponentData
         {
@@ -34,14 +40,16 @@ namespace AnalyzeInterference.ViewModels
             set { SetProperty(ref _selectedComponent, value); }
         }
 
-        public DelegateCommand<object> DataGridDoubleClickCommand { get; private set; }
+
 
         public ResultWindowViewModel()
         {
+            
+
             try
             {
                 ComponentData = new ObservableCollection<ComponentData>();
-                DataGridDoubleClickCommand = new DelegateCommand<object>(DataGridDoubleClicked);
+                DataGridRowDoubleClickCommand = new DelegateCommand<object>(ExecuteRowDoubleClick);
             }
             catch (Exception ex)
             {
@@ -51,16 +59,31 @@ namespace AnalyzeInterference.ViewModels
         public ResultWindowViewModel(ObservableCollection<ComponentData> data)
         {
             ComponentData = data;
-            DataGridDoubleClickCommand = new DelegateCommand<object>(DataGridDoubleClicked);
         }
 
-        private void DataGridDoubleClicked(object selectedItem)
+        private void ExecuteRowDoubleClick(object selectedItem)
         {
             if (selectedItem is ComponentData componentData)
             {
                 MessageBox.Show($"Name: {componentData.ComponentOccurrence.Name}");
             }
         }
+
+
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var grid = sender as DataGrid;
+            if (grid != null && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
+            {
+                var row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem);
+                if (row != null)
+                {
+                    var cellContent = row.Item; // ここで選択された行のデータを取得します。
+                    MessageBox.Show(cellContent.ToString()); // MessageBoxでデータを表示します。
+                }
+            }
+        }
+
     }
 
 }

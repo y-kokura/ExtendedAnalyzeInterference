@@ -75,7 +75,8 @@ namespace ExtendedAnalyzeInterference
             createdAddInButton = null;
             uiEvents = null;
             InvApp = null;
-            createdAddInButton.OnExecute -= new ButtonDefinitionSink_OnExecuteEventHandler(OnAddInButtonExecute);
+            try { createdAddInButton.OnExecute -= new ButtonDefinitionSink_OnExecuteEventHandler(OnAddInButtonExecute); } catch { }
+            
 
             GC.Collect();
             GC.WaitForPendingFinalizers();

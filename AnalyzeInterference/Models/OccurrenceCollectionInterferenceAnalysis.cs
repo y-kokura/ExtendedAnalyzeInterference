@@ -15,6 +15,8 @@ namespace AnalyzeInterference.Models
         private static OccurrenceCollectionInterferenceAnalysis _instance;
         public static OccurrenceCollectionInterferenceAnalysis Instance => _instance ?? (_instance = new OccurrenceCollectionInterferenceAnalysis());
 
+
+
         public (InterferenceResults AnalyzeResultsBoth, InterferenceResults AnalyzeResultsScrew) PerformInterferenceAnalysis(ObjectCollection ScrewComponentCollection,ObjectCollection NonScrewComponentCollection)
         {
             AssemblyComponentDefinition assemblyCompDef = Globals.ActiveInvDoc.ComponentDefinition;
@@ -22,10 +24,10 @@ namespace AnalyzeInterference.Models
             InterferenceResults AnalyzeResultsScrew=null;
             //InterferenceResults resultsNonScrew=null;
 
-            if(ScrewComponentCollection==0)return(null,null);
+            if(ScrewComponentCollection.Count==0)return(null,null);
             
             AnalyzeResultsScrew = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection);
-            if(NonScrewComponentCollection>=1)AnalyzeResultsBoth = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection, NonScrewComponentCollection);
+            if(NonScrewComponentCollection.Count>=1)AnalyzeResultsBoth = assemblyCompDef.AnalyzeInterference(ScrewComponentCollection, NonScrewComponentCollection);
                         
             return (AnalyzeResultsBoth, AnalyzeResultsScrew);
 
