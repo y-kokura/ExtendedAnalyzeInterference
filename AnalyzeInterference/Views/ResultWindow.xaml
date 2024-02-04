@@ -30,9 +30,14 @@
             CanUserDeleteRows="False"
             CanUserResizeRows="False"
             VirtualizingPanel.ScrollUnit="Pixel"
-            SelectionMode="Single"
-            MouseDoubleClick="DataGrid_MouseDoubleClick">
+            SelectionMode="Single">
 
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding RowDoubleClickCommand}" 
+                                           CommandParameter="{Binding SelectedItem}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
 
 
             <DataGrid.Columns>

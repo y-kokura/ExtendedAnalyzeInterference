@@ -23,10 +23,8 @@ namespace AnalyzeInterference.ViewModels
     {
         private ObservableCollection<ComponentData> _componentData;
         private ComponentData _selectedComponent;
-        public DelegateCommand<object> DataGridRowDoubleClickCommand { get; private set; }
+        public DelegateCommand<object> RowDoubleClickCommand { get; private set; }
 
-
-        public DelegateCommand<object> CellDoubleClickCommand { get; private set; }
 
         public ObservableCollection<ComponentData> ComponentData
         {
@@ -48,8 +46,9 @@ namespace AnalyzeInterference.ViewModels
 
             try
             {
-                ComponentData = new ObservableCollection<ComponentData>();
-                DataGridRowDoubleClickCommand = new DelegateCommand<object>(ExecuteRowDoubleClick);
+                ComponentData = new ObservableCollection<ComponentData>(); 
+                RowDoubleClickCommand = new DelegateCommand<object>(OnRowDoubleClick);
+
             }
             catch (Exception ex)
             {
@@ -61,27 +60,17 @@ namespace AnalyzeInterference.ViewModels
             ComponentData = data;
         }
 
-        private void ExecuteRowDoubleClick(object selectedItem)
+        public void OnRowDoubleClick(object parameter)
         {
-            if (selectedItem is ComponentData componentData)
-            {
-                MessageBox.Show($"Name: {componentData.ComponentOccurrence.Name}");
-            }
-        }
 
-
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var grid = sender as DataGrid;
-            if (grid != null && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
+            MessageBox.Show("a");
+            var item = parameter as ComponentData; // YourItemTypeは、DataGridの項目の型です
+            if (item != null)
             {
-                var row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem);
-                if (row != null)
-                {
-                    var cellContent = row.Item; // ここで選択された行のデータを取得します。
-                    MessageBox.Show(cellContent.ToString()); // MessageBoxでデータを表示します。
-                }
+                // ダブルクリックされた項目に対する処理
+                MessageBox.Show(item.ComponentOccurrence.Name);
             }
+
         }
 
     }

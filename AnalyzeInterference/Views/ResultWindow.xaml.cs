@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Microsoft.Xaml.Behaviors;
 
 using System.Windows.Shapes;
 
@@ -24,21 +25,9 @@ namespace AnalyzeInterference.Views
     {
         public ResultWindow()
         {
-            InitializeComponent();
+             InitializeComponent();
         }
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var grid = sender as DataGrid;
-            if (grid != null && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
-            {
-                var row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem);
-                if (row != null)
-                {
-                    var cellContent = row.Item; // ここで選択された行のデータを取得します。
-                    MessageBox.Show(cellContent.ToString()); // MessageBoxでデータを表示します。
-                }
-            }
-        }
+
     }
 }
 
